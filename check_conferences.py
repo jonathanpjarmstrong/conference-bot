@@ -18,49 +18,46 @@ import os
 import subprocess
 import sys
 from datetime import datetime
+from typing import Optional, List, Dict
 from playwright.sync_api import sync_playwright
 
 # --- Configuration ---
 URLS = [
-    # Add your conference URLs here, e.g.:
-    # "https://uxdx.com/",
-    # "https://config.figma.com/",
-    # "https://smashingconf.com/conferences/",
-    # "https://www.hatchconference.com/",
-    # "https://worldusabilitycongress.com/",
-    # "https://uxbri.org/",
-    # "https://leadingdesign.com/",
-    # "https://www.uxcon.io/",
-    # "https://www.uxconference.org/",
-    # "https://uxpa.org/",
-    # "https://www.aiga.org/design/aiga-design-conference",
-    # "https://designmatters.io/",
-    # "https://push-conference.com/",
-    # "https://2025.ux-india.org/",
-    # "https://www.uxyall.org/",
-    # "https://sxsw.com/",
-    # "https://rosenfeldmedia.com/designops-summit/",
-    # "https://sdn-youngtalentboard.org/conference/",
-    # "https://vancouver.websummit.com/",
-    # "https://websummit.com/",
-    # "https://afrotechconference.com/",
-    # "https://developer.apple.com/",
-    # "https://io.google/",
-    # "https://2026.uxlondon.com/",
-    # "https://www.renderatl.com/",
-    # "https://canux.io/",
-    # "https://merlien.com/",
-    # "https://www.qrca.org/",
-    # "https://rosenfeldmedia.com/advancing-research/",
-    # "https://thequirksevent.com/",
-    # "https://joinlearners.com/research-week/",
-    # "https://uxpa.org/",
-    # "https://epicpeople.org",
-    # "https://www.uxcon.io/",
-    # "https://www.uxconference.org/home",
-    # "https://www.hatchconference.com/",
-    # "https://www.designup.io",
-    # "https://https://ifdesign.com/",
+    "https://uxdx.com/",
+    "https://config.figma.com/",
+    "https://smashingconf.com/conferences/",
+    "https://www.hatchconference.com/",
+    "https://worldusabilitycongress.com/",
+    "https://uxbri.org/",
+    "https://leadingdesign.com/",
+    "https://www.uxcon.io/",
+    "https://www.uxconference.org/",
+    "https://uxpa.org/",
+    "https://www.aiga.org/design/aiga-design-conference",
+    "https://designmatters.io/",
+    "https://push-conference.com/",
+    "https://2025.ux-india.org/",
+    "https://www.uxyall.org/",
+    "https://sxsw.com/",
+    "https://rosenfeldmedia.com/designops-summit/",
+    "https://sdn-youngtalentboard.org/conference/",
+    "https://vancouver.websummit.com/",
+    "https://websummit.com/",
+    "https://afrotechconference.com/",
+    "https://developer.apple.com/",
+    "https://io.google/",
+    "https://2026.uxlondon.com/",
+    "https://www.renderatl.com/",
+    "https://canux.io/",
+    "https://merlien.com/",
+    "https://www.qrca.org/",
+    "https://rosenfeldmedia.com/advancing-research/",
+    "https://thequirksevent.com/",
+    "https://joinlearners.com/research-week/",
+    "https://epicpeople.org",
+    "https://www.designup.io",
+    "https://ifdesign.com/",
+    "https://www.clarityconf.com/",
 ]
 
 SNAPSHOT_DIR = "snapshots"
@@ -79,7 +76,7 @@ def snapshot_path(url: str) -> str:
     return os.path.join(SNAPSHOT_DIR, f"{slugify(url)}.json")
 
 
-def load_snapshot(url: str) -> dict | None:
+def load_snapshot(url: str) -> Optional[dict]:
     path = snapshot_path(url)
     if os.path.exists(path):
         with open(path) as f:
@@ -98,7 +95,7 @@ def save_snapshot(url: str, text: str) -> None:
         json.dump(data, f, indent=2)
 
 
-def log_audit(checked: list[str], alerts: list[dict]) -> None:
+def log_audit(checked: List[str], alerts: List[Dict]) -> None:
     """Append a run summary to audit_log.txt."""
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(AUDIT_LOG, "a") as f:
